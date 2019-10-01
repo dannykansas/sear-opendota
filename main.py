@@ -1,6 +1,8 @@
 from argparse import ArgumentParser, FileType
 from sys import stdout
 
+import requests
+
 
 def parse_args():
     """
@@ -32,6 +34,17 @@ def parse_args():
 
 def main():
     args = parse_args()
+
+def connector():
+
+def get_proplayers():
+
+def get_teams():
+
+def merge_proplayers():
+
+def sum_experience_by_team():
+
 
 
 if __name__ == "__main__":
