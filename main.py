@@ -49,17 +49,19 @@ def get_proplayers():
     for player in req.json():
         player_xp = check_experience(player)
         cumulative_xp = add_to_scoreboard(player, player_xp)
-        print(cumulative_xp)
+
     # then start matching team IDs in cumulative_xp to /team/{team_id} and construct the YAML! easy.
+    for key in cumulative_xp.keys():
+        print(key, '(Score:', cumulative_xp[key], ')')
 
 def check_experience(player):
-    if player['full_history_time'] not 'None':
+    try:
         _player_history_time = player['full_history_time']
         _corrected_time = datetime.datetime.strptime(_player_history_time, '%Y-%m-%dT%H:%M:%S.%fZ')
         player_xp = time.time() - _corrected_time.timestamp()
-    else:
-        # TODO: log the fact that there was no data returned for this user
+    except:
         player_xp = 0
+
     return player_xp
 
 def add_to_scoreboard(player, player_xp):
@@ -71,6 +73,8 @@ def add_to_scoreboard(player, player_xp):
         _new_team_dict = {player['team_id']:_calc_team_xp}
         cumulative_xp.update(_new_team_dict)
     return cumulative_xp
+
+def return_top_n(cumulative_xp,args."-n")
 
 if __name__ == "__main__":
     main()
