@@ -1,0 +1,26 @@
+# yaml-schema
+
+- team_name
+    team_id: <team_id>
+    team_total_xp: <total_xp>
+    wins: <win_count>
+    losses: <loss_count>
+    rating: <team_ranking>
+    players:
+      - persona_name
+          experience: <person_ranking>
+          country_code: <country_code>
+      - persona_name
+          experience: <person_ranking>
+          country_code: <country_code>
+- team_name
+    wins: <win_count>
+    losses: <loss_count>
+    rating: <team_rating>
+    players:
+      - persona_name
+          experience: <person_ranking>
+          country_code: <country_code>
+      - persona_name
+          experience: <person_ranking>
+          country_code: <country_code>
