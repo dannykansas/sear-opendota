@@ -74,7 +74,8 @@ def add_to_scoreboard(player, player_xp):
         cumulative_xp.update(_new_team_dict)
     return cumulative_xp
 
-def return_top_n(cumulative_xp,args."-n")
+def return_top_n(cumulative_xp,args."-n"):
+    print("stub")
 
 if __name__ == "__main__":
     main()
