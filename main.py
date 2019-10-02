@@ -45,7 +45,11 @@ def main():
     Parse arguments and setup logging, get players
     """
     args = parse_args()
-    logging.debug("Log level set to {}", args.loglevel)
+
+    # setup simple logging
+    args.loglevel = logging._nameToLevel[args.loglevel]
+    logging.basicConfig(level=args.loglevel)
+    logging.info("Log level set to {}".format(args.loglevel))
 
     get_proplayers(args)
 
@@ -73,13 +77,12 @@ def check_experience(player):
             _player_history_time, "%Y-%m-%dT%H:%M:%S.%fZ"
         )
         player_xp = static_time - _corrected_time.timestamp()
-        logging.info("Player {} gets {} XP.", player["name"], player_xp)
+        logging.info("Player {} gets {} XP".format(player["name"], player_xp))
     except:
         logging.debug(
             "Failed to calculate score for {}, setting to zero".format(player["name"])
         )
         player_xp = 0
-        pass
 
     return player_xp
 
@@ -140,7 +143,6 @@ def score_teams(cumulative_xp, req, args):
                 "Team {} could not be found, skipping.".format(team_name["name"])
             )
             logging.info("Could not find team {} ".format(team_name["name"]))
-            pass
 
         _player_list = []
         for player in req:
