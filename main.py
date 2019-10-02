@@ -18,6 +18,8 @@ def parse_args():
         description="Find the DOTA 2 teams with the most combined player *experience",
         epilog="*Experience is defined as the length of a player's recorded history.",
     )
+    # I don't love the open file handle left around by argparse's builtin file handler
+    # so I modified this to just be a string I can use to open it cleanly later.
     parser.add_argument("output", nargs="?", default=stdout)
     parser.add_argument(
         "-n", "--numteams", type=int, default=5, help="number of teams in output"
