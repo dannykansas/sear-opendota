@@ -32,16 +32,19 @@ def parse_args():
     return parser.parse_args()
 
 
-# constants
+# A few convenient constants
 cumulative_xp = {}
 uri = "https://api.opendota.com/api"
 static_time = time.time()
 
 
 def main():
+    """
+    Parse arguments and setup logging, get players
+    """
     args = parse_args()
-    print(args.loglevel)
-    # logging.basicConfig(level=("-l"))
+    logging.basicConfig(level=args.loglevel)
+    logging.debug("Log level set to {}", args.loglevel)
 
     get_proplayers(args)
 
@@ -131,27 +134,30 @@ def score_teams(cumulative_xp, req, args):
                 }
             )
             logging.debug("Added {} to team list.".format(team_name["name"]))
-            for player in req:
-                if player["team_id"] == _team_id:
-                    _player_list.append(
-                        {
-                            "persona": player["personaname"],
-                            "experience": int(check_experience(player)),
-                            "country": player["country_code"],
-                        }
-                    )
-            _team_list.append(_player_list)
         except:
             logging.error(
                 "Team {} could not be found, skipping.".format(team_name["name"])
             )
             logging.info("Could not find team {} ".format(team_name["name"]))
             pass
+
+        _player_list = []
+        for player in req:
+            if player["team_id"] == _team_id:
+                _player_list.append(
+                    {
+                        "persona": player["personaname"],
+                        "experience": int(check_experience(player)),
+                        "country": player["country_code"],
+                    }
+                )
+        _team_list.append(_player_list)
+
     try:
         if args.output == stdout:
             print(yaml.dump(_team_list, default_flow_style=False))
         else:
-            with open("output.yaml", "w+") as outfile:
+            with open(args.output, "w+") as outfile:
                 yaml.safe_dump(_team_list, outfile, default_flow_style=False)
                 logging.debug("Wrote file successfully to {}".format(outfile))
     except:
