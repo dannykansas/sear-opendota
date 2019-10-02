@@ -135,6 +135,7 @@ def score_teams(cumulative_xp, req, args):
                     "team_name": team_name["name"],
                     "team_wins": team_name["wins"],
                     "team_losses": team_name["losses"],
+                    "team_experience": int(cumulative_xp[_team_id]),
                 }
             )
             logging.debug("Added {} to team list.".format(team_name["name"]))
