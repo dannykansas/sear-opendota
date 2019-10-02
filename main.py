@@ -69,18 +69,21 @@ def check_experience(player):
             _player_history_time, "%Y-%m-%dT%H:%M:%S.%fZ"
         )
         player_xp = static_time - _corrected_time.timestamp()
+        logging.info("Player {} gets {} XP.", player["name"], player_xp)
     except:
         logging.debug(
             "Failed to calculate score for {}, setting to zero".format(player["name"])
         )
         player_xp = 0
+        pass
 
     return player_xp
 
 
 def add_to_scoreboard(player, player_xp):
     """
-    Summate the collective player's score into a dictionary with keys = team_id.
+    Summate the collective player's score into a dictionary with keys = team_id,
+    value = cumulative_score.
     """
     if player["team_id"] not in cumulative_xp.keys():
         cumulative_xp.update({player["team_id"]: 0})
@@ -118,7 +121,6 @@ def score_teams(cumulative_xp, req, args):
     _team_list = []
     _player_list = []
     for _team_id in top_teams:
-        # DEBUG: print(_team_id, ":", cumulative_xp.get(_team_id))
         try:
             team_name = requests.get(uri + "/teams/" + str(_team_id)).json()
             _team_list.append(
@@ -128,29 +130,30 @@ def score_teams(cumulative_xp, req, args):
                     "team_losses": team_name["losses"],
                 }
             )
-            logging.DEBUG("Added {} to team list.".format(team_name["name"]))
+            logging.debug("Added {} to team list.".format(team_name["name"]))
             for player in req:
                 if player["team_id"] == _team_id:
                     _player_list.append(
-                        [
-                            {
-                                "persona": player["personaname"],
-                                "experience": int(check_experience(player)),
-                                "country": player["country_code"],
-                            }
-                        ]
+                        {
+                            "persona": player["personaname"],
+                            "experience": int(check_experience(player)),
+                            "country": player["country_code"],
+                        }
                     )
-                    _team_list.append(_player_list)
+            _team_list.append(_player_list)
         except:
             logging.error(
                 "Team {} could not be found, skipping.".format(team_name["name"])
             )
-            logging.info("Could not find Team {} ".format(team_name["name"]))
+            logging.info("Could not find team {} ".format(team_name["name"]))
             pass
     try:
-        with open("ranking.yml", "w+") as outfile:
-            yaml.safe_dump(_team_list, outfile, default_flow_style=False)
-            logging.debug("Wrote file successfully to {}".format(outfile))
+        if args.output == stdout:
+            print(yaml.dump(_team_list, default_flow_style=False))
+        else:
+            with open("output.yaml", "w+") as outfile:
+                yaml.safe_dump(_team_list, outfile, default_flow_style=False)
+                logging.debug("Wrote file successfully to {}".format(outfile))
     except:
         logging.error("Failed writing output to yaml file.")
 
