@@ -40,14 +40,13 @@ static_time = time.time()
 
 def main():
     args = parse_args()
+    print(args.loglevel)
+    # logging.basicConfig(level=("-l"))
 
-    #    with open(args.output) as file:
-    # TODO: put yaml together
-    #    logging.basicConfig(level=logging.args("-l"))
-    get_proplayers()
+    get_proplayers(args)
 
 
-def get_proplayers():
+def get_proplayers(args):
     """
     Retrieve players from OpenDota
     """
@@ -56,7 +55,7 @@ def get_proplayers():
         player_xp = check_experience(player)
         cumulative_xp = add_to_scoreboard(player, player_xp)
 
-    score_teams(cumulative_xp, req)
+    score_teams(cumulative_xp, req, args)
 
 
 def check_experience(player):
@@ -72,9 +71,7 @@ def check_experience(player):
         player_xp = static_time - _corrected_time.timestamp()
     except:
         logging.debug(
-            "Failed to calculate score for {}, setting to zero".format(
-                player["player_name"]
-            )
+            "Failed to calculate score for {}, setting to zero".format(player["name"])
         )
         player_xp = 0
 
@@ -95,7 +92,7 @@ def add_to_scoreboard(player, player_xp):
     return cumulative_xp
 
 
-def score_teams(cumulative_xp, req):
+def score_teams(cumulative_xp, req, args):
     """
     Sort the top n teams, write data to YAML file.
 
@@ -110,7 +107,7 @@ def score_teams(cumulative_xp, req):
     out YAML much...
     """
 
-    _args_n = args.numteams
+    _arg_n = args.numteams
 
     # remove entry for team "0"
     if 0 in cumulative_xp:
