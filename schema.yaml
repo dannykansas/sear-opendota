@@ -24,3 +24,15 @@
       - persona_name
           experience: <person_ranking>
           country_code: <country_code>
+
+
+[
+  {'team_name':[{'wins':00,'losses':00,'rating':0202},{'players':}]}
+
+]
+
+for i in teams:
+  print i['wins']
+  print i['loss']
+  for player in teams['players']:
+     print players
