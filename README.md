@@ -1,4 +1,4 @@
-# SEAR OpenDota
+# Apple SEAR - OpenDota API
 
 Done:
 - must not use any credentials
