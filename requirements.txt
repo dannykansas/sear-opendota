@@ -4,4 +4,4 @@ idna==2.8
 oyaml==0.9
 PyYAML==5.1.2
 requests==2.22.0
-urllib3==1.25.6
+urllib3==1.26.5
